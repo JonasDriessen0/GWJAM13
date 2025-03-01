@@ -1,29 +1,18 @@
 
+using System;
 using UnityEngine;
 public class HeadBobbing : MonoBehaviour
 {
     [SerializeField] private float bobbingSpeed;
-    [SerializeField] private float bobHeight;
+    [SerializeField] private float bobbingAmount;
+    [SerializeField] private float bobbingSmoothness;
     [SerializeField] private GameObject playerCamera;
-
-    private Vector3 vel;
     
-    private Animator headBobAni;
-    private PlayerController _playerController;
-
-    // Update is called once per frame
-    private void Start()
+    public void StartHeadBob()
     {
-        headBobAni = GetComponent<Animator>();
-        _playerController = GetComponent<PlayerController>();
+        Vector3 pos = Vector3.zero;
+        pos.y += Mathf.Lerp(pos.y, Mathf.Sin(Time.time * bobbingSpeed) * bobbingAmount * 1.4f,bobbingSmoothness * Time.deltaTime);
+        playerCamera.transform.localPosition += pos;
     }
 
-    void Update()
-    {
-        float speed = vel.magnitude;
-        
-        float sin = bobHeight * Mathf.Sin(bobbingSpeed * speed);
-        playerCamera.transform.position = Vector3.up * sin; 
-
-    }
 }
