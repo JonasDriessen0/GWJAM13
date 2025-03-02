@@ -4,9 +4,6 @@ using UnityEngine.Events;
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
 {
-    private enum PlayerState { Idle, Moving }
-    private PlayerState currentState = PlayerState.Idle;
-
     [SerializeField] private float movementSpeed = 7.5f;
     [SerializeField] private Camera playerCamera;
     
