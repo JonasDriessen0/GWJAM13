@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class NumpadSystem : MonoBehaviour
 {
-    private int codeLenght;
     private int placeInLine;
+    private int codeLenght;
 
     [SerializeField] private string numCode = "";
     [SerializeField] private string codeAttempt;
@@ -22,17 +22,18 @@ public class NumpadSystem : MonoBehaviour
     {
         if (codeAttempt == numCode)
         {
-            GuessedCodeLight.gameObject.SetActive(true);
+            GuessedCodeLight.SetActive(true);
         }
     }
 
     public void SetValue(string value)
     {
-        placeInLine++;
-        if (placeInLine <= codeLenght)
+        if (placeInLine < codeLenght)
         {
             codeAttempt += value;
+            placeInLine++;
         }
+
         if (placeInLine == codeLenght)
         {
             CheckCode();
