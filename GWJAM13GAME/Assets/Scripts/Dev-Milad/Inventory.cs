@@ -43,4 +43,16 @@ public class Inventory : MonoBehaviour
             }
         }
     }
+
+    public bool LookForObject (string itemName)
+    {
+        if (items.Contains(itemName))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 }
