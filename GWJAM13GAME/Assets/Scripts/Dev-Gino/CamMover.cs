@@ -1,30 +1,28 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
 
 public class CamMover : MonoBehaviour
 {
-    public Vector3 targetPoint;
+    public Transform targetPoint;
+    
     public float moveDuration = 1.5f; // Smooth transition duration
     public Ease easing = Ease.InOutSine; // Smoother movement
 
 
-    private void Start()
+    private async void Start()
     {
-        transform.DORotate(new Vector3(45, -45, 0), 5f);
-
+        await MoveCamera(Quaternion.Euler(45f,0,0f), targetPoint.position);
     }
-
-    public void ToggleCameraPosition()
+    
+    private async Task MoveCamera(Quaternion rotation, Vector3 endPosition, CancellationToken cancellationToken = default)
     {
-        
-    }
-
-    private void MoveCamera(Vector3 newPosition, Quaternion newRotation)
-    {
-        transform.DOMove(newPosition, moveDuration).SetEase(easing);
-        transform.DORotate(new Vector3(0, -25, 0), 5f);
+        Task moveTask = transform.DOMove(endPosition, moveDuration).SetEase(easing).AsyncWaitForCompletion();
+        Task rotateTask = transform.DORotateQuaternion(rotation, moveDuration).SetEase(easing).AsyncWaitForCompletion();
+        await Task.WhenAll(moveTask, rotateTask);
     }
 }
