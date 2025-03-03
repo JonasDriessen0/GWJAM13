@@ -5,10 +5,15 @@ using UnityEngine;
 
 public class Pickup : MonoBehaviour
 {
-    Inventory inventory;
-    string itemName;
+    [SerializeField] Inventory inventory;
+    [SerializeField] string itemName;
 
     // Dummy if statement
+
+    private void Start()
+    {
+        
+    }
 
     private void Update()
     {
@@ -18,8 +23,9 @@ public class Pickup : MonoBehaviour
         }
     }
 
-    private void PickupItem()
+    public void PickupItem()
     {
+        Debug.Log($"Picked up {itemName}");
         inventory.items.Add(itemName);
         Destroy(gameObject);
     }
