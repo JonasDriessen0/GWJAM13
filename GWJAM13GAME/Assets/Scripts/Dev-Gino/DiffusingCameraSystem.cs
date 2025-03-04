@@ -22,7 +22,7 @@ public class DiffusingCameraSystem : MonoBehaviour
             Debug.Log("try again later");
         }
     }
-
+    
     private void InDiffuseMode()
     {
         if (Input.mousePosition.x >= Screen.width - Screen.width / 4)

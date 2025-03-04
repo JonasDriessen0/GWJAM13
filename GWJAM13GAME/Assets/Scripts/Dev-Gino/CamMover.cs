@@ -18,8 +18,9 @@ public class CamMover : MonoBehaviour
     {
         await MoveCamera(Quaternion.Euler(45f,0,0f), targetPoint.position);
     }
-    
-    private async Task MoveCamera(Quaternion rotation, Vector3 endPosition, CancellationToken cancellationToken = default)
+
+    private async Task MoveCamera(Quaternion rotation, Vector3 endPosition,
+        CancellationToken cancellationToken = default)
     {
         Task moveTask = transform.DOMove(endPosition, moveDuration).SetEase(easing).AsyncWaitForCompletion();
         Task rotateTask = transform.DORotateQuaternion(rotation, moveDuration).SetEase(easing).AsyncWaitForCompletion();
