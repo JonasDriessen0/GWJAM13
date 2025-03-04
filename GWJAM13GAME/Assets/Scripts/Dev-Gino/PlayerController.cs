@@ -19,6 +19,9 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
         _characterController = GetComponent<CharacterController>();
         _rotation.y = transform.eulerAngles.y;
     }
