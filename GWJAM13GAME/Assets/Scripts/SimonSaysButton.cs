@@ -1,25 +1,46 @@
-using System;
-using System.Collections.Generic;
 using UnityEngine;
-using Random = UnityEngine.Random;
+using System;
+using System.Collections;
 
 public class SimonSaysButton : MonoBehaviour, IClickable
 {
-    [SerializeField] private List<GameObject> buttons;
-    [SerializeField] private List<GameObject> lights;
+    public event Action<SimonSaysButton> OnButtonPressed;
+    private Renderer buttonRenderer;
+    private Color originalColor;
 
     private void Start()
     {
-        foreach (var light in lights)
-        {
-            light.SetActive(false);
-        }
+        buttonRenderer = GetComponent<Renderer>();
+        originalColor = buttonRenderer.material.color;
     }
 
     public void OnClick()
     {
-        Debug.Log(gameObject.name + " was clicked!");
-        // Add your custom logic here (e.g., change color, open a menu, etc.)
-        GetComponent<Renderer>().material.color = Random.ColorHSV();
+        OnButtonPressed?.Invoke(this);
+        //StartCoroutine(FlashWhite());
+    }
+
+    public void Flash()
+    {
+        StartCoroutine(FlashWhite());
+    }
+
+    public void FlashRed()
+    {
+        StartCoroutine(FlashFailure());
+    }
+
+    private IEnumerator FlashWhite()
+    {
+        buttonRenderer.material.color = Color.white;
+        yield return new WaitForSeconds(0.2f);
+        buttonRenderer.material.color = originalColor;
+    }
+
+    private IEnumerator FlashFailure()
+    {
+        buttonRenderer.material.color = Color.red;
+        yield return new WaitForSeconds(0.2f);
+        buttonRenderer.material.color = originalColor;
     }
 }
