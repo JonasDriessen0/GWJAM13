@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -346,6 +346,7 @@ GameObject:
   m_Component:
   - component: {fileID: 533021200}
   - component: {fileID: 533021201}
+  - component: {fileID: 533021202}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -382,6 +383,97 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerCam: {fileID: 1338670893}
   items: []
+--- !u!114 &533021202
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 533021198}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a310a79cda4fca549ac90fba041a0bf7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isDiffusing: 0
+  playerController: {fileID: 915295204}
+  diffusingCamera: {fileID: 1338670897}
+  diffuseMode:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1338670897}
+        m_TargetAssemblyTypeName: DiffusingCameraSystem, Assembly-CSharp
+        m_MethodName: InDiffuseMode
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  playermode:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 915295204}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: PlayerCamera
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  cameraTransition:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1338670896}
+        m_TargetAssemblyTypeName: CamMover, Assembly-CSharp
+        m_MethodName: MoveCamera
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!1 &752209602
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 752209603}
+  m_Layer: 0
+  m_Name: TargetPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &752209603
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 752209602}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 18.25, y: 0.92, z: 26.96}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &807224648
 GameObject:
   m_ObjectHideFlags: 0
@@ -414,7 +506,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 821c09083efe9ae4c976cf55c9d388b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventory: {fileID: 0}
+  inventory: {fileID: 533021201}
   itemName: Cube
 --- !u!65 &807224650
 BoxCollider:
@@ -514,7 +606,6 @@ GameObject:
   - component: {fileID: 915295206}
   - component: {fileID: 915295204}
   - component: {fileID: 915295203}
-  - component: {fileID: 915295207}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -627,22 +718,6 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &915295207
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 915295202}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad654c53c379ff146b925e423051cce2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inDiffuse: 0
-  maxRotation: 180
-  minRotation: 100
-  rotationSpeed: 45
 --- !u!1 &942060511
 GameObject:
   m_ObjectHideFlags: 0
@@ -865,6 +940,8 @@ GameObject:
   - component: {fileID: 1338670893}
   - component: {fileID: 1338670892}
   - component: {fileID: 1338670895}
+  - component: {fileID: 1338670896}
+  - component: {fileID: 1338670897}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -990,6 +1067,36 @@ MonoBehaviour:
     mipBias: 0
     varianceClampScale: 0.9
     contrastAdaptiveSharpening: 0
+--- !u!114 &1338670896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1338670891}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e1b9c67d735ad94a848d0a4bb3a5743, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetPoint: {fileID: 807224653}
+  moveDuration: 1.5
+  easing: 4
+--- !u!114 &1338670897
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1338670891}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad654c53c379ff146b925e423051cce2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxRotation: -60
+  minRotation: 60
+  rotationSpeed: 45
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -1000,3 +1107,4 @@ SceneRoots:
   - {fileID: 1117343318}
   - {fileID: 533021200}
   - {fileID: 807224653}
+  - {fileID: 752209603}

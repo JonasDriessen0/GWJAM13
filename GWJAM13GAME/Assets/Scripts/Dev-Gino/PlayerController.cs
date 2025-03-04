@@ -41,13 +41,18 @@ public class PlayerController : MonoBehaviour
 
         _moveDirection = (forward * moveX) + (right * moveY);
         _characterController.Move(_moveDirection * Time.deltaTime);
+        
+        PlayerCamera();
 
-        // Determine new state
         if (_moveDirection.magnitude > 0)
         {
             headBob.Invoke();
         }
+    }
 
+    public void PlayerCamera()
+    {
+        playerCamera.transform.localPosition = new Vector3(0, 0.64f, 0);
         _rotation.y += Input.GetAxis("Mouse X") * lookSpeed;
         _rotation.x += -Input.GetAxis("Mouse Y") * lookSpeed;
         _rotation.x = Mathf.Clamp(_rotation.x, -lookXLimit, lookXLimit);
@@ -55,5 +60,4 @@ public class PlayerController : MonoBehaviour
         playerCamera.transform.localRotation = Quaternion.Euler(_rotation.x, 0, 0);
         transform.eulerAngles = new Vector2(0, _rotation.y);
     }
-
 }

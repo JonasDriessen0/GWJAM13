@@ -4,37 +4,46 @@ using UnityEngine;
 
 public class DiffusingCameraSystem : MonoBehaviour
 {
-    public bool inDiffuse;
+    [SerializeField] private float maxRotation = 60f;
+    [SerializeField] private float minRotation = -60f;
+    [SerializeField] private float rotationSpeed = 45f;
 
-    public float maxRotation = 235;
-    public float minRotation = 125;
+    private bool isActive = false;
+    private float initialRotationY;
 
-    public float rotationSpeed = 45f;
-
-    private void Update() 
+    private void Update()
     {
-        if (inDiffuse)
+        if (isActive)
         {
             InDiffuseMode();
         }
-        else
-        {
-            Debug.Log("try again later");
-        }
     }
-    
-    private void InDiffuseMode()
+
+    public void Activate()
     {
+        isActive = true;
+        initialRotationY = transform.localEulerAngles.y;
+    }
+
+    public void Deactivate()
+    {
+        isActive = false;
+    }
+
+    public void InDiffuseMode()
+    {
+        float currentY = transform.localEulerAngles.y;
+
         if (Input.mousePosition.x >= Screen.width - Screen.width / 4)
         {
-            if (this.transform.localEulerAngles.y < maxRotation)
+            if (currentY < maxRotation)
             {
                 transform.Rotate(Vector3.up, rotationSpeed * Time.deltaTime);
             }
         }
         else if (Input.mousePosition.x <= Screen.width - (Screen.width / 4 * 3))
         {
-            if (this.transform.localEulerAngles.y > minRotation)
+            if (currentY > minRotation)
             {
                 transform.Rotate(Vector3.up, -rotationSpeed * Time.deltaTime);
             }
