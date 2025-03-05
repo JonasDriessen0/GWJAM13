@@ -13,6 +13,8 @@ public class DraggableObject : MonoBehaviour, IClickable
     private Vector3 offset;
     private Transform parentTransform;
 
+    public float Value { get; private set; } // The slider's value (0 to 1)
+
     void Start()
     {
         mainCamera = Camera.main;
@@ -30,11 +32,11 @@ public class DraggableObject : MonoBehaviour, IClickable
         if (isDragging)
         {
             Vector3 newPosition = GetMouseWorldPosition() + offset;
-            
+
             if (restrictX) newPosition.x = transform.position.x;
             if (restrictY) newPosition.y = transform.position.y;
             if (restrictZ) newPosition.z = transform.position.z;
-            
+
             Vector3 localPosition = parentTransform.InverseTransformPoint(newPosition);
             localPosition = new Vector3(
                 Mathf.Clamp(localPosition.x, minLocalPosition.x, maxLocalPosition.x),
@@ -42,6 +44,13 @@ public class DraggableObject : MonoBehaviour, IClickable
                 Mathf.Clamp(localPosition.z, minLocalPosition.z, maxLocalPosition.z)
             );
             transform.position = parentTransform.TransformPoint(localPosition);
+
+            // Calculate a normalized value (0 to 1)
+            float range = maxLocalPosition.x - minLocalPosition.x;
+            if (range != 0)
+            {
+                Value = Mathf.InverseLerp(minLocalPosition.x, maxLocalPosition.x, localPosition.x);
+            }
         }
 
         if (Input.GetMouseButtonUp(0))
@@ -54,7 +63,7 @@ public class DraggableObject : MonoBehaviour, IClickable
     {
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
         Plane plane = new Plane(Vector3.up, transform.position);
-        
+
         if (plane.Raycast(ray, out float distance))
         {
             return ray.GetPoint(distance);
