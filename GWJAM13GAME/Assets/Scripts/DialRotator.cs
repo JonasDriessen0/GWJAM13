@@ -33,6 +33,7 @@ public class DialRotator : MonoBehaviour, IClickable
     {
         if (isDragging)
         {
+            Cursor.visible = false;
             Vector3 mouseDelta = Input.mousePosition - lastMousePosition;
             float rotationAmount = mouseDelta.x * rotationSpeed;
 
@@ -71,6 +72,8 @@ public class DialRotator : MonoBehaviour, IClickable
 
         if (Input.GetMouseButtonUp(0))
         {
+            Cursor.visible = true;
+
             isDragging = false;
         }
     }
