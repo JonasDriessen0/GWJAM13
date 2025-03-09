@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float lookXLimit = 45.0f;
 
     private CharacterController _characterController;
+    
     public UnityEvent headBob;
     public UnityEvent stopHeadBob;
 
@@ -19,8 +20,8 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        //Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.visible = false;
 
         _characterController = GetComponent<CharacterController>();
         _rotation.y = transform.eulerAngles.y;

@@ -42,7 +42,7 @@ public class CameraStateSystem : MonoBehaviour
             case CameraStates.Idle:
                 playerController.enabled = true;
                 diffusingCamera.enabled = false;
-                diffusingCamera.Deactivate(); // Ensure it's inactive
+                diffusingCamera.Deactivate();
                 Cursor.lockState = CursorLockMode.Locked;
                 Cursor.visible = false;
                 playermode?.Invoke();
@@ -52,7 +52,7 @@ public class CameraStateSystem : MonoBehaviour
                 cameraTransition?.Invoke();
                 playerController.enabled = false;
                 diffusingCamera.enabled = true;
-                diffusingCamera.Activate(); // Activate diffusing mode
+                diffusingCamera.Activate();
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
                 diffuseMode?.Invoke();

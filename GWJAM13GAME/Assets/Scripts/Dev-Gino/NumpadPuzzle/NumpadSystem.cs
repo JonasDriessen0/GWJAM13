@@ -1,7 +1,6 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;  
+using TMPro;           
 
 public class NumpadSystem : MonoBehaviour
 {
@@ -9,13 +8,15 @@ public class NumpadSystem : MonoBehaviour
     private int codeLenght;
 
     [SerializeField] private string numCode = "";
-    [SerializeField] private string codeAttempt;
+    [SerializeField] private string codeAttempt = "";
 
     [SerializeField] private GameObject GuessedCodeLight;
+    [SerializeField] private TMP_Text codeDisplay;
 
     private void Start()
     {
         codeLenght = numCode.Length;
+        UpdateDisplay();
     }
 
     private void CheckCode()
@@ -23,6 +24,11 @@ public class NumpadSystem : MonoBehaviour
         if (codeAttempt == numCode)
         {
             GuessedCodeLight.SetActive(true);
+            Debug.Log(" Correct Code entered");
+        }
+        else
+        {
+            Debug.Log("Wrong Code entered");
         }
     }
 
@@ -32,13 +38,26 @@ public class NumpadSystem : MonoBehaviour
         {
             codeAttempt += value;
             placeInLine++;
+            UpdateDisplay();
         }
 
         if (placeInLine == codeLenght)
         {
             CheckCode();
-            codeAttempt = "";
-            placeInLine = 0;
+            ResetCode();
         }
+    }
+
+    private void ResetCode()
+    {
+        codeAttempt = "";
+        placeInLine = 0;
+        UpdateDisplay();
+    }
+
+    private void UpdateDisplay()
+    {
+        if (codeDisplay != null)
+            codeDisplay.text = codeAttempt;
     }
 }
