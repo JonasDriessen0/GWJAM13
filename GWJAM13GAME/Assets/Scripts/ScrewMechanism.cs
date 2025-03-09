@@ -6,7 +6,8 @@ public class ScrewMechanism : MonoBehaviour, IClickable
     public Transform screw;
     public float unscrewHeight = 0.5f;
     public int requiredFullRotations = 4;
-    
+    public PanelMechanism panel; // Reference to panel mechanism
+
     private bool isUnscrewing = false;
     private Vector3 initialScrewLocalPosition;
     private Vector3 initialScrewdriverLocalPosition;
@@ -14,7 +15,6 @@ public class ScrewMechanism : MonoBehaviour, IClickable
     private float previousRotation = 0f;
     private float totalRotationAngle = 0f;
     private float screwProgress = 0f;
-    private float screwdriverOffset = 0.0743f;
 
     public void OnClick()
     {
@@ -37,20 +37,16 @@ public class ScrewMechanism : MonoBehaviour, IClickable
         if (isUnscrewing)
         {
             float currentRotation = screwdriver.transform.localEulerAngles.y;
-            
             float rotationDelta = Mathf.DeltaAngle(previousRotation, currentRotation);
-            
             previousRotation = currentRotation;
-            
+
             screw.localRotation = Quaternion.Euler(initialScrewRotation.x, currentRotation, initialScrewRotation.z);
-            
+
             if (rotationDelta < 0)
             {
                 totalRotationAngle += Mathf.Abs(rotationDelta);
-                
                 float targetRotation = requiredFullRotations * 360f;
                 screwProgress = Mathf.Clamp01(totalRotationAngle / targetRotation);
-                
                 float heightIncrease = unscrewHeight * screwProgress;
                 
                 Vector3 newScrewPos = initialScrewLocalPosition;
@@ -61,12 +57,15 @@ public class ScrewMechanism : MonoBehaviour, IClickable
                 newDriverPos.y += heightIncrease;
                 screwdriver.transform.localPosition = newDriverPos;
             }
-            
+
             if (screwProgress >= 1.0f)
             {
                 screwdriver.gameObject.SetActive(false);
                 screw.gameObject.SetActive(false);
                 isUnscrewing = false;
+
+                // Notify panel
+                panel?.OnScrewRemoved();
             }
         }
     }

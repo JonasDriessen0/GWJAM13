@@ -2,16 +2,14 @@ using UnityEngine;
 
 public class DraggableObject : MonoBehaviour, IClickable
 {
-    public bool restrictX = false;
-    public bool restrictY = false;
-    public bool restrictZ = false;
-    public Vector3 minLocalPosition = new Vector3(-5, -5, -5);
-    public Vector3 maxLocalPosition = new Vector3(5, 5, 5);
+    public float minZ = -5f; // Minimum Z position
+    public float maxZ = 5f;  // Maximum Z position
 
     private Camera mainCamera;
     private bool isDragging = false;
     private Vector3 offset;
     private Transform parentTransform;
+    private Vector3 initialLocalPosition; // Stores the original X and Y values
 
     public float Value { get; private set; } // The slider's value (0 to 1)
 
@@ -19,6 +17,8 @@ public class DraggableObject : MonoBehaviour, IClickable
     {
         mainCamera = Camera.main;
         parentTransform = transform.parent ? transform.parent : transform;
+        initialLocalPosition = parentTransform.InverseTransformPoint(transform.position); // Save initial X and Y
+        UpdateValue(); // Set initial value
     }
 
     public void OnClick()
@@ -31,38 +31,43 @@ public class DraggableObject : MonoBehaviour, IClickable
     {
         if (isDragging)
         {
+            Cursor.visible = false;
+
             Vector3 newPosition = GetMouseWorldPosition() + offset;
-
-            if (restrictX) newPosition.x = transform.position.x;
-            if (restrictY) newPosition.y = transform.position.y;
-            if (restrictZ) newPosition.z = transform.position.z;
-
             Vector3 localPosition = parentTransform.InverseTransformPoint(newPosition);
-            localPosition = new Vector3(
-                Mathf.Clamp(localPosition.x, minLocalPosition.x, maxLocalPosition.x),
-                Mathf.Clamp(localPosition.y, minLocalPosition.y, maxLocalPosition.y),
-                Mathf.Clamp(localPosition.z, minLocalPosition.z, maxLocalPosition.z)
-            );
+
+            // Keep original X and Y, only change Z
+            localPosition = new Vector3(initialLocalPosition.x, initialLocalPosition.y, Mathf.Clamp(localPosition.z, minZ, maxZ));
             transform.position = parentTransform.TransformPoint(localPosition);
 
-            // Calculate a normalized value (0 to 1)
-            float range = maxLocalPosition.x - minLocalPosition.x;
-            if (range != 0)
-            {
-                Value = Mathf.InverseLerp(minLocalPosition.x, maxLocalPosition.x, localPosition.x);
-            }
+            UpdateValue();
         }
 
         if (Input.GetMouseButtonUp(0))
         {
+            Cursor.visible = true;
+
             isDragging = false;
         }
+    }
+
+    private void UpdateValue()
+    {
+        Vector3 localPosition = parentTransform.InverseTransformPoint(transform.position);
+
+        // Normalize Z value between min and max
+        if (localPosition.z <= maxZ && localPosition.z >= minZ)
+        {
+            Value = Mathf.InverseLerp(minZ, maxZ, localPosition.z);
+        }
+
+        Debug.Log($"Slider Value: {Value}");
     }
 
     private Vector3 GetMouseWorldPosition()
     {
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-        Plane plane = new Plane(Vector3.up, transform.position);
+        Plane plane = new Plane(Vector3.up, transform.position); // Keep movement on a horizontal plane
 
         if (plane.Raycast(ray, out float distance))
         {
