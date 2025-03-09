@@ -7,15 +7,19 @@ public class WireCable : MonoBehaviour
     public bool isCorrectWire;
     private bool isCut;
 
+    [SerializeField] private GameObject intactWire;  
+    [SerializeField] private GameObject cutWire;
+    
     public void CutWire()
     {
         if (isCut) return;
         isCut = true;
-
-        // Visual Feedback
-        GetComponent<MeshRenderer>().material.color = Color.gray;
-        GetComponent<Collider>().enabled = false;
-
+        
+        Debug.Log($"{gameObject.name} was cut. Correct wire? {isCorrectWire}");
+        
+        if (intactWire != null) intactWire.SetActive(false);
+        if (cutWire != null) cutWire.SetActive(true);
+        
         // Notify puzzle manager
         CableComponent.Instance.WireCut(this);
     }
