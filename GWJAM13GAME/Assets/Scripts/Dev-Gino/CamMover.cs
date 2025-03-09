@@ -2,21 +2,44 @@ using System.Threading;
 using System.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class CamMover : MonoBehaviour
 {
     public Transform targetPoint;
-    
-    public float moveDuration = 1.5f; // Smooth transition duration
-    public Ease easing = Ease.InOutSine; // Smoother movement
+    public float moveDuration = 1.5f;
+    public Ease easing = Ease.InOutSine;
 
-    private UnityEvent camChange;
+    private Vector3 originalPosition;
+    private Quaternion originalRotation;
+    private bool isMoved = false;
 
+    private void Start()
+    {
+        originalPosition = transform.position;
+        originalRotation = transform.rotation;
+    }
+
+    private void Update()
+    {
+        if (isMoved && Input.GetKeyDown(KeyCode.Escape))
+        {
+            ResetCamera();
+        }
+    }
 
     public async void MoveCamera()
     {
-        await MoveCamera(Quaternion.Euler(45f,0,0f), targetPoint.position);
+        if (targetPoint != null)
+        {
+            isMoved = true;
+            await MoveCamera(targetPoint.rotation, targetPoint.position);
+        }
+    }
+
+    public async void ResetCamera()
+    {
+        isMoved = false;
+        await MoveCamera(originalRotation, originalPosition);
     }
 
     private async Task MoveCamera(Quaternion rotation, Vector3 endPosition,

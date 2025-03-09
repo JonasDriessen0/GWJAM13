@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1380091364756148573
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3358874169898923689}
+  m_Layer: 0
+  m_Name: Camtransform
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3358874169898923689
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1380091364756148573}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.024192313, y: 0.8852294, z: -0.08479976, w: 0.45671955}
+  m_LocalPosition: {x: -0.1633, y: 0.1011, z: 0.1106}
+  m_LocalScale: {x: 0.021641027, y: 0.021641025, z: 0.021641027}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5738810627774020333}
+  m_LocalEulerAnglesHint: {x: 9.918, y: 125.244, z: -2.015}
 --- !u!1 &2334875025840506257
 GameObject:
   m_ObjectHideFlags: 0
@@ -55,6 +86,8 @@ MonoBehaviour:
   lockRotationDirection: 1
   allowClockwise: 1
   allowCounterClockwise: 0
+  minRotation: -90
+  maxRotation: 90
 --- !u!136 &4314818637633202813
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -323,6 +356,7 @@ Transform:
   m_LocalScale: {x: 6.797736, y: 6.797736, z: 6.797736}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 3358874169898923689}
   - {fileID: 7093161802814217468}
   - {fileID: 7247559841228242284}
   m_Father: {fileID: 0}
@@ -343,6 +377,9 @@ MonoBehaviour:
   screw: {fileID: 7093161802814217468}
   unscrewHeight: 0.014
   requiredFullRotations: 6
+  panel: {fileID: 0}
+  camMover: {fileID: 0}
+  moveToTransform: {fileID: 3358874169898923689}
 --- !u!135 &6821743005170026932
 SphereCollider:
   m_ObjectHideFlags: 0
