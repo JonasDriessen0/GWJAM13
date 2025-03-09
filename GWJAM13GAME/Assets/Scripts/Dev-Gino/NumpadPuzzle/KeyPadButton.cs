@@ -3,12 +3,12 @@ using UnityEngine.UI;
 
 public class KeypadButton : MonoBehaviour, IClickable
 {
-    [SerializeField] private string buttonValue;  // Set this in the Inspector
+    [SerializeField] private string buttonValue;
     private NumpadSystem numPad;
 
     private void Start()
     {
-        numPad = FindObjectOfType<NumpadSystem>(); // Find the NumpadSystem in the scene
+        numPad = FindObjectOfType<NumpadSystem>();
     }
 
     public void OnClick()
