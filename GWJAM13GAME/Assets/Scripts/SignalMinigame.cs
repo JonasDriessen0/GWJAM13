@@ -6,6 +6,8 @@ public class SignalMinigame : MonoBehaviour
 {
     private GameObject waveVisual;
 
+    public bool hasCompleted;
+    
     private OscilloscopeWave playerWave;
     private OscilloscopeWave targetWave;
 
@@ -257,8 +259,11 @@ public class SignalMinigame : MonoBehaviour
     {
         if (statusText != null && statusTextObject != null)
         {
+            hasCompleted = true;
             statusText.text = "All signals successfully matched!";
             statusTextObject.SetActive(true);
+            clearSignalAudio.Stop();
+            staticNoiseAudio.Stop();
         }
     }
 }

@@ -23,6 +23,8 @@ public class FuseComponent : MonoBehaviour
     private bool[] removalInProgress = new bool[3]; // Track if removal is in progress
     private Coroutine hideMultitoolCoroutine;
 
+    public bool hasCompleted;
+    
     private void Start()
     {
         InitializeFuses();
@@ -47,6 +49,9 @@ public class FuseComponent : MonoBehaviour
 
     private void InitializeFuses()
     {
+        // Reset completion status when initializing
+        hasCompleted = false;
+        
         // Randomly select which fuse is broken
         brokenFuseIndex = Random.Range(0, 3);
 
@@ -210,10 +215,14 @@ public class FuseComponent : MonoBehaviour
 
         ShowMultitool();
         voltageDisplayText.text = "New fuse installed successfully!";
+        hasCompleted = true;
 
-        if (fuseIndex == brokenFuseIndex)
+        // Check if this was the previously broken fuse position
+        if (brokenFuseIndex == -1 && fuseIndex == brokenFuseIndex)
         {
-            brokenFuseIndex = -1;
+            // Mark the task as completed when the broken fuse is replaced
+            hasCompleted = true;
+            voltageDisplayText.text = "New fuse installed successfully! Task completed!";
         }
 
         StartCoroutine(HideMultitoolAfterDelay(2f));

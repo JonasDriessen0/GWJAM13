@@ -8,6 +8,8 @@ public class SimonSaysComponent : MonoBehaviour
     [SerializeField] private List<SimonSaysButton> buttons;
     [SerializeField] private List<GameObject> lights;
 
+    public bool hasCompleted;
+    
     private List<List<int>> patterns = new List<List<int>> 
     {
         new List<int> { 0, 1, 2 },
@@ -142,6 +144,7 @@ public class SimonSaysComponent : MonoBehaviour
         }
         else
         {
+            hasCompleted = true;
             Debug.Log("You have completed all patterns!");
         }
     }

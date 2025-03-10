@@ -5,7 +5,8 @@ using UnityEngine;
 public class KeypadComponent : MonoBehaviour
 {
     private NumpadSystem numPad;
-
+    public LayerMask layerMask;
+    
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
@@ -13,12 +14,13 @@ public class KeypadComponent : MonoBehaviour
             CheckHitNumpad();
         }
     }
+
     private void CheckHitNumpad()
     {
         RaycastHit hit;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-        if (Physics.Raycast(ray, out hit, 100))
+        if (Physics.Raycast(ray, out hit, 100, layerMask))
         {
             numPad = hit.transform.gameObject.GetComponentInParent<NumpadSystem>();
             if (numPad != null)

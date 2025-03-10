@@ -7,6 +7,8 @@ public class NumpadSystem : MonoBehaviour
     private int placeInLine;
     private int codeLenght;
 
+    public bool hasCompleted;
+
     [SerializeField] private string numCode = "";
     [SerializeField] private string codeAttempt = "";
 
@@ -24,7 +26,14 @@ public class NumpadSystem : MonoBehaviour
         if (codeAttempt == numCode)
         {
             GuessedCodeLight.SetActive(true);
-            Debug.Log(" Correct Code entered");
+
+            hasCompleted = true;
+            
+            // Instead of calling SetValue, directly update the UI display
+            if (codeDisplay != null)
+                codeDisplay.text = "Correct";
+
+            Debug.Log("Correct");
         }
         else
         {
@@ -44,7 +53,7 @@ public class NumpadSystem : MonoBehaviour
         if (placeInLine == codeLenght)
         {
             CheckCode();
-            ResetCode();
+            //ResetCode();
         }
     }
 

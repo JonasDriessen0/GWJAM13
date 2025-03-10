@@ -7,12 +7,13 @@ public class BombComponentsManager : MonoBehaviour
     [SerializeField] private List<Transform> componentPositions;
     [SerializeField] private List<GameObject> availableComponents;
     private List<GameObject> spawnedComponents = new List<GameObject>();
-    private int currentComponentIndex = 0;
+    private CountdownTimer countdownTimer;
 
     private void Start()
     {
+        countdownTimer = FindObjectOfType<CountdownTimer>();
         SpawnComponents();
-        RevealNextComponent(); // Start by revealing the first component
+        StartCoroutine(CheckCompletionRoutine());
     }
 
     private void SpawnComponents()
@@ -23,20 +24,45 @@ public class BombComponentsManager : MonoBehaviour
             GameObject component = Instantiate(availableComponents[randomIndex], spawnPoint);
             availableComponents.RemoveAt(randomIndex);
             
-            spawnedComponents.Add(component); // Store the spawned component
+            spawnedComponents.Add(component);
         }
     }
 
-    public void RevealNextComponent()
+    private IEnumerator CheckCompletionRoutine()
     {
-        if (currentComponentIndex < spawnedComponents.Count)
+        while (true)
         {
-            Animator anim = spawnedComponents[currentComponentIndex].GetComponent<Animator>();
-            if (anim != null)
+            bool allCompleted = true;
+            
+            foreach (var component in spawnedComponents)
             {
-                anim.SetTrigger("Activate");
+                if (!IsComponentCompleted(component))
+                {
+                    allCompleted = false;
+                    break;
+                }
             }
-            currentComponentIndex++;
+
+            if (allCompleted)
+            {
+                Time.timeScale = 0;
+                yield break;
+            }
+
+            yield return new WaitForSeconds(0.5f);
         }
+    }
+
+    private bool IsComponentCompleted(GameObject component)
+    {
+        var fuse = component.GetComponent<FuseComponent>();
+        var simonSays = component.GetComponent<SimonSaysComponent>();
+        var signalMinigame = component.GetComponent<SignalMinigame>();
+        var numpad = component.GetComponent<NumpadSystem>();
+        
+        return (fuse != null && fuse.hasCompleted) ||
+               (simonSays != null && simonSays.hasCompleted) ||
+               (signalMinigame != null && signalMinigame.hasCompleted) ||
+               (numpad != null && numpad.hasCompleted);
     }
 }
