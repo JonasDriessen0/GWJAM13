@@ -129,8 +129,8 @@ public class SignalMinigame : MonoBehaviour
         // Adjust audio volumes
         if (clearSignalAudio && staticNoiseAudio)
         {
-            clearSignalAudio.volume = matchPercentage;
-            staticNoiseAudio.volume = 1f - matchPercentage;
+            clearSignalAudio.volume = matchPercentage * 0.3f; // Lowered volume
+            staticNoiseAudio.volume = (1f - matchPercentage) * 0.3f; // Lowered volume
         }
 
         // Check if the values are within the matching threshold

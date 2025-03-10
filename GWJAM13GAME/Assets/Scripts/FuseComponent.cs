@@ -17,6 +17,11 @@ public class FuseComponent : MonoBehaviour
     [SerializeField] private TMP_Text voltageDisplayText; // TMP text object for voltage display
     [SerializeField] private GameObject multitool; // Reference to the multitool object
 
+    [Header("Audio Settings")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip fuseRemoveSFX;
+    [SerializeField] private AudioClip fuseInsertSFX;
+    
     private int brokenFuseIndex; // Which fuse is broken
     private float[] fuseVoltages = new float[3];
     private bool[] fuseRemoved = new bool[3];
@@ -30,20 +35,25 @@ public class FuseComponent : MonoBehaviour
         InitializeFuses();
 
         voltageDisplayText = Camera.main.transform.Find("Multytool Devise/text")?.GetComponent<TMP_Text>();
-        
-        // Find the multitool in the scene if not assigned
+
         if (multitool == null)
         {
-            multitool = GameObject.Find("Multytool Devise"); // Ensure the name matches your hierarchy
+            multitool = GameObject.Find("Multytool Devise");
         }
 
         if (multitool != null)
         {
-            multitool.SetActive(false); // Ensure it starts hidden
+            multitool.SetActive(false);
         }
         else
         {
             Debug.LogWarning("Multitool object not found!");
+        }
+
+        // Ensure we have an AudioSource component
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
         }
     }
 
@@ -186,6 +196,11 @@ public class FuseComponent : MonoBehaviour
             fuseRenderer.enabled = false;
         }
 
+        if (fuseRemoveSFX != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(fuseRemoveSFX);
+        }
+        
         if (fuseIndex == brokenFuseIndex)
         {
             voltageDisplayText.text = "Correct fuse removed! Click to place a new one.";
@@ -213,6 +228,11 @@ public class FuseComponent : MonoBehaviour
             fuseRenderer.enabled = true;
         }
 
+        if (fuseRemoveSFX != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(fuseRemoveSFX);
+        }
+        
         ShowMultitool();
         voltageDisplayText.text = "New fuse installed successfully!";
         hasCompleted = true;

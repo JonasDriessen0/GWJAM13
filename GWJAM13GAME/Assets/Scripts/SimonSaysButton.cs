@@ -5,19 +5,29 @@ using System.Collections;
 public class SimonSaysButton : MonoBehaviour, IClickable
 {
     public event Action<SimonSaysButton> OnButtonPressed;
+    
     private Renderer buttonRenderer;
     private Color originalColor;
+    
+    [SerializeField] private AudioClip beepSound;
+    private AudioSource audioSource;
 
     private void Start()
     {
         buttonRenderer = GetComponent<Renderer>();
         originalColor = buttonRenderer.material.color;
+        
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
     }
 
     public void OnClick()
     {
         OnButtonPressed?.Invoke(this);
-        //StartCoroutine(FlashWhite());
+        PlayBeep();
     }
 
     public void Flash()
@@ -42,5 +52,13 @@ public class SimonSaysButton : MonoBehaviour, IClickable
         buttonRenderer.material.color = Color.red;
         yield return new WaitForSeconds(0.2f);
         buttonRenderer.material.color = originalColor;
+    }
+
+    private void PlayBeep()
+    {
+        if (beepSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(beepSound);
+        }
     }
 }

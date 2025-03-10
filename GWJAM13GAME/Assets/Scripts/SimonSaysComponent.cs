@@ -7,9 +7,11 @@ public class SimonSaysComponent : MonoBehaviour
 {
     [SerializeField] private List<SimonSaysButton> buttons;
     [SerializeField] private List<GameObject> lights;
-
+    [SerializeField] private AudioSource beepSource; // Reference to AudioSource
+    [SerializeField] private AudioClip correctSfx;
+    [SerializeField] private AudioClip incorrectSfx;
     public bool hasCompleted;
-    
+
     private List<List<int>> patterns = new List<List<int>> 
     {
         new List<int> { 0, 1, 2 },
@@ -26,6 +28,11 @@ public class SimonSaysComponent : MonoBehaviour
 
     private void Start()
     {
+        if (beepSource == null)
+        {
+            Debug.LogError("AudioSource is missing! Assign it in the Inspector.");
+        }
+
         ResetGame();
     }
 
@@ -34,7 +41,7 @@ public class SimonSaysComponent : MonoBehaviour
         Debug.Log("Resetting game...");
         currentPatternIndex = 0;
         playerInput.Clear();
-        currentPattern.Clear(); // Clear current pattern to avoid old inputs
+        currentPattern.Clear();
         isPlayerTurn = false;
 
         foreach (var light in lights)
@@ -50,12 +57,12 @@ public class SimonSaysComponent : MonoBehaviour
             }
             else
             {
-                button.OnButtonPressed -= HandleButtonPress; // Ensure no duplicate events
+                button.OnButtonPressed -= HandleButtonPress;
                 button.OnButtonPressed += HandleButtonPress;
             }
         }
 
-        StartCoroutine(FlashPattern(patterns[currentPatternIndex])); // Start first pattern
+        StartCoroutine(FlashPattern(patterns[currentPatternIndex]));
     }
 
     private void HandleFlash(SimonSaysButton button)
@@ -75,6 +82,7 @@ public class SimonSaysComponent : MonoBehaviour
 
         if (playerInput[playerInput.Count - 1] != currentPattern[playerInput.Count - 1])
         {
+            beepSource.PlayOneShot(incorrectSfx);
             Debug.Log("Wrong input! Resetting game...");
             StartCoroutine(FlashFailureEffect());
             return;
@@ -84,6 +92,7 @@ public class SimonSaysComponent : MonoBehaviour
 
         if (playerInput.Count == currentPattern.Count)
         {
+            beepSource.PlayOneShot(correctSfx);
             Debug.Log("Pattern completed!");
             StartCoroutine(FlashSuccessEffect());
         }
@@ -93,7 +102,7 @@ public class SimonSaysComponent : MonoBehaviour
     {
         Debug.Log("Starting Flash Pattern...");
         currentPattern = new List<int>(buttonIndexes);
-        playerInput.Clear(); // Reset player input for new round
+        playerInput.Clear();
         isPlayerTurn = false;
 
         yield return new WaitForSeconds(1f);
@@ -118,7 +127,6 @@ public class SimonSaysComponent : MonoBehaviour
     private IEnumerator FlashSuccessEffect()
     {
         isPlayerTurn = false;
-
         yield return new WaitForSeconds(0.3f);
         
         for (int i = 0; i < 2; i++)
@@ -152,7 +160,6 @@ public class SimonSaysComponent : MonoBehaviour
     private IEnumerator FlashFailureEffect()
     {
         isPlayerTurn = false;
-
         yield return new WaitForSeconds(0.3f);
         
         for (int i = 0; i < 2; i++)
